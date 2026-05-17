@@ -12,8 +12,62 @@ const MAX_ENTRIES = 100;
 const TARGET_PLAYER = 'falansh';
 
 const normalizeName = (value) => String(value || '').trim();
-const isFalansh = (value) => normalizeName(value).toLowerCase() === TARGET_PLAYER;
+const normalizeKey = (value) => normalizeName(value).toLowerCase();
+const isFalansh = (value) => normalizeKey(value) === TARGET_PLAYER;
 const hasValidPassword = (body) => body?.password === '2026';
+
+function buildLeaderboard() {
+  const players = new Map();
+
+  function ensurePlayer(name) {
+    const key = normalizeKey(name);
+    if (!players.has(key)) {
+      players.set(key, {
+        name,
+        played: 0,
+        wins: 0,
+        draws: 0,
+        losses: 0,
+        goalsFor: 0,
+        goalsAgainst: 0,
+        goalDifference: 0,
+        points: 0
+      });
+    }
+    return players.get(key);
+  }
+
+  for (const match of scores) {
+    const one = ensurePlayer(match.playerOneName);
+    const two = ensurePlayer(match.playerTwoName);
+
+    one.played += 1;
+    two.played += 1;
+    one.goalsFor += match.playerOneScore;
+    one.goalsAgainst += match.playerTwoScore;
+    two.goalsFor += match.playerTwoScore;
+    two.goalsAgainst += match.playerOneScore;
+
+    if (match.playerOneScore > match.playerTwoScore) {
+      one.wins += 1;
+      one.points += 3;
+      two.losses += 1;
+    } else if (match.playerTwoScore > match.playerOneScore) {
+      two.wins += 1;
+      two.points += 3;
+      one.losses += 1;
+    } else {
+      one.draws += 1;
+      two.draws += 1;
+      one.points += 1;
+      two.points += 1;
+    }
+  }
+
+  return [...players.values()]
+    .map((player) => ({ ...player, goalDifference: player.goalsFor - player.goalsAgainst }))
+    .sort((a, b) => b.points - a.points || b.goalDifference - a.goalDifference || b.goalsFor - a.goalsFor || a.name.localeCompare(b.name));
+}
 
 app.register(fastifyStatic, {
   root: __dirname
@@ -21,6 +75,14 @@ app.register(fastifyStatic, {
 
 app.get('/api/scores', async () => {
   return { scores, count: scores.length, targetPlayer: 'Falansh' };
+});
+
+app.get('/api/matches', async () => {
+  return { matches: scores, count: scores.length };
+});
+
+app.get('/api/leaderboard', async () => {
+  return { leaderboard: buildLeaderboard(), count: scores.length };
 });
 
 app.post('/api/add-score', async (request, reply) => {
