@@ -4,7 +4,7 @@
   "players": [
     "Falansh",
     "Sanket",
-    "Aditya",
+    "Omkar",
     "Rohan"
   ],
   "games": [
@@ -12,8 +12,8 @@
       "id": "game-001",
       "playedAt": "2026-05-10T21:00:00+05:30",
       "scores": {
-        "Falansh": 1,
-        "Sanket": 3
+        "Omkar": 1,
+        "Sanket": 0
       }
     },
     {
@@ -21,23 +21,7 @@
       "playedAt": "2026-05-11T22:15:00+05:30",
       "scores": {
         "Falansh": 0,
-        "Aditya": 2
-      }
-    },
-    {
-      "id": "game-003",
-      "playedAt": "2026-05-12T20:45:00+05:30",
-      "scores": {
-        "Falansh": 2,
-        "Rohan": 4
-      }
-    },
-    {
-      "id": "game-004",
-      "playedAt": "2026-05-13T21:30:00+05:30",
-      "scores": {
-        "Sanket": 5,
-        "Aditya": 4
+        "Omkar": 1
       }
     }
   ]
