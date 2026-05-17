@@ -13,6 +13,7 @@ const TARGET_PLAYER = 'falansh';
 
 const normalizeName = (value) => String(value || '').trim();
 const isFalansh = (value) => normalizeName(value).toLowerCase() === TARGET_PLAYER;
+const hasValidPassword = (body) => body?.password === '2026';
 
 app.register(fastifyStatic, {
   root: __dirname
@@ -25,7 +26,7 @@ app.get('/api/scores', async () => {
 app.post('/api/add-score', async (request, reply) => {
   const body = request.body || {};
 
-  if (body.password !== '2026') {
+  if (!hasValidPassword(body)) {
     return reply.code(401).send({ error: 'Invalid password' });
   }
 
@@ -67,6 +68,25 @@ app.post('/api/add-score', async (request, reply) => {
   scores.unshift(entry);
 
   return { success: true, entry, total: scores.length };
+});
+
+app.delete('/api/scores/:id', async (request, reply) => {
+  const body = request.body || {};
+
+  if (!hasValidPassword(body)) {
+    return reply.code(401).send({ error: 'Invalid password' });
+  }
+
+  const id = Number(request.params.id);
+  const index = scores.findIndex((score) => Number(score.id) === id);
+
+  if (index === -1) {
+    return reply.code(404).send({ error: 'Score not found' });
+  }
+
+  const [deleted] = scores.splice(index, 1);
+
+  return { success: true, deleted, total: scores.length };
 });
 
 app.listen({ port: 3000, host: '0.0.0.0' });
