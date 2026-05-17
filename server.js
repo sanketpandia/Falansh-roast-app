@@ -9,13 +9,17 @@ const __dirname = path.dirname(__filename);
 const app = Fastify();
 const scores = [];
 const MAX_ENTRIES = 100;
+const TARGET_PLAYER = 'falansh';
+
+const normalizeName = (value) => String(value || '').trim();
+const isFalansh = (value) => normalizeName(value).toLowerCase() === TARGET_PLAYER;
 
 app.register(fastifyStatic, {
-  root: path.join(__dirname, 'public')
+  root: __dirname
 });
 
 app.get('/api/scores', async () => {
-  return { scores, count: scores.length };
+  return { scores, count: scores.length, targetPlayer: 'Falansh' };
 });
 
 app.post('/api/add-score', async (request, reply) => {
@@ -29,10 +33,34 @@ app.post('/api/add-score', async (request, reply) => {
     return reply.code(429).send({ error: 'Max entries reached' });
   }
 
+  const playerOneName = normalizeName(body.playerOneName);
+  const playerTwoName = normalizeName(body.playerTwoName);
+  const playerOneScore = Number(body.playerOneScore);
+  const playerTwoScore = Number(body.playerTwoScore);
+
+  if (!playerOneName || !playerTwoName) {
+    return reply.code(400).send({ error: 'Both player names are required' });
+  }
+
+  if (!Number.isInteger(playerOneScore) || !Number.isInteger(playerTwoScore) || playerOneScore < 0 || playerTwoScore < 0) {
+    return reply.code(400).send({ error: 'Scores must be non-negative whole numbers' });
+  }
+
+  const falanshPlayed = isFalansh(playerOneName) || isFalansh(playerTwoName);
+  const falanshScore = isFalansh(playerOneName) ? playerOneScore : isFalansh(playerTwoName) ? playerTwoScore : null;
+  const opponentName = isFalansh(playerOneName) ? playerTwoName : isFalansh(playerTwoName) ? playerOneName : null;
+  const opponentScore = isFalansh(playerOneName) ? playerTwoScore : isFalansh(playerTwoName) ? playerOneScore : null;
+
   const entry = {
     id: Date.now(),
-    playerScore: body.playerScore,
-    falanshScore: body.falanshScore,
+    playerOneName,
+    playerTwoName,
+    playerOneScore,
+    playerTwoScore,
+    falanshPlayed,
+    opponentName,
+    falanshScore,
+    opponentScore,
     createdAt: new Date().toISOString()
   };
 
