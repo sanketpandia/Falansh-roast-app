@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Falansh FIFA Loss Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <p class="eyebrow">FIFA Banter Dashboard</p>
+      <h1>Falansh Loss Tracker</h1>
+      <p class="subtitle">
+        Edit <code>games.json</code>, redeploy, and this page recalculates the loss streak and leaderboard.
+      </p>
+    </section>
+
+    <section id="error-card" class="card error-card hidden" aria-live="assertive"></section>
+
+    <section id="verdict-card" class="card verdict-card hidden" aria-live="polite">
+      <div class="verdict-icon">🚨</div>
+      <div>
+        <p class="eyebrow danger">Verdict unlocked</p>
+        <h2 id="verdict-title">Falansh is a lodu.</h2>
+        <p id="verdict-copy">Repeated FIFA losses have activated banter protocol.</p>
+      </div>
+    </section>
+
+    <section class="card config-card">
+      <div>
+        <h2>JSON config</h2>
+        <p class="muted">Source: <code>games.json</code>. Keep players fewer than 10.</p>
+      </div>
+      <div class="config-pills">
+        <span><strong id="target-player">-</strong> target</span>
+        <span><strong id="player-count">0</strong>/9 players</span>
+        <span><strong id="threshold">0</strong> loss threshold</span>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="card stat-card">
+        <span>Target matches</span>
+        <strong id="target-matches">0</strong>
+      </article>
+      <article class="card stat-card">
+        <span>Wins</span>
+        <strong id="wins">0</strong>
+      </article>
+      <article class="card stat-card">
+        <span>Losses</span>
+        <strong id="losses">0</strong>
+      </article>
+      <article class="card stat-card">
+        <span>Current loss streak</span>
+        <strong id="loss-streak">0</strong>
+      </article>
+    </section>
+
+    <section class="card leaderboard-card">
+      <div class="history-header">
+        <div>
+          <h2>Leaderboard</h2>
+          <p class="muted">Calculated from all games in the JSON.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Played</th>
+              <th>Wins</th>
+              <th>Draws</th>
+              <th>Losses</th>
+              <th>Goals For</th>
+              <th>Goals Against</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card history-card">
+      <div class="history-header">
+        <div>
+          <h2>Game history</h2>
+          <p class="muted">Each game can contain 2 to 9 configured players.</p>
+        </div>
+      </div>
+      <ol id="history-list" class="history-list"></ol>
+      <p id="empty-state" class="empty-state">No games found in <code>games.json</code>.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

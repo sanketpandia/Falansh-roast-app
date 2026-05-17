@@ -1,0 +1,44 @@
+{
+  "roastTarget": "Falansh",
+  "roastThreshold": 3,
+  "players": [
+    "Falansh",
+    "Sanket",
+    "Aditya",
+    "Rohan"
+  ],
+  "games": [
+    {
+      "id": "game-001",
+      "playedAt": "2026-05-10T21:00:00+05:30",
+      "scores": {
+        "Falansh": 1,
+        "Sanket": 3
+      }
+    },
+    {
+      "id": "game-002",
+      "playedAt": "2026-05-11T22:15:00+05:30",
+      "scores": {
+        "Falansh": 0,
+        "Aditya": 2
+      }
+    },
+    {
+      "id": "game-003",
+      "playedAt": "2026-05-12T20:45:00+05:30",
+      "scores": {
+        "Falansh": 2,
+        "Rohan": 4
+      }
+    },
+    {
+      "id": "game-004",
+      "playedAt": "2026-05-13T21:30:00+05:30",
+      "scores": {
+        "Sanket": 5,
+        "Aditya": 4
+      }
+    }
+  ]
+}
